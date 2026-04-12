@@ -1,12 +1,12 @@
 // 1. CONFIGURAÇÃO DO FIREBASE
 const firebaseConfig = {
-    apiKey: "AIzaSyBw-0k1-Z2-B9j-D2-H7j-J0-K2-L0-M0-N0",
-    authDomain: "seu-projeto.firebaseapp.com",
-    databaseURL: "https://seu-projeto-default-rtdb.firebaseio.com",
-    projectId: "seu-projeto",
-    storageBucket: "seu-projeto.appspot.com",
-    messagingSenderId: "SEU_ID_AQUI",
-    appId: "SEU_APP_ID_AQUI"
+    apiKey: "AIzaSyD-5T6GVI0iLdg", 
+    authDomain: "afiliados-e32b5.firebaseapp.com",
+    databaseURL: "https://afiliados-e32b5-default-rtdb.firebaseio.com",
+    projectId: "afiliados-e32b5",
+    storageBucket: "afiliados-e32b5.appspot.com",
+    messagingSenderId: "527757792488",
+    appId: "1:527757792488:web:0928f5c3faaef9fa6d255d"
 };
 
 // Inicializa o Firebase
@@ -17,7 +17,7 @@ window.onload = function() {
     const urlParams = new URLSearchParams(window.location.search);
     const produtoID = urlParams.get('id') || 'default';
 
-    // BUSCA OS DADOS NA NUVEM
+    // 2. BUSCA OS DADOS NA NUVEM AO CARREGAR A PÁGINA
     database.ref('produtos/' + produtoID).on('value', (snapshot) => {
         const dados = snapshot.val();
         
@@ -25,7 +25,7 @@ window.onload = function() {
             if(document.getElementById('titulo-produto')) document.getElementById('titulo-produto').innerText = dados.titulo;
             if(document.querySelector('.description')) document.querySelector('.description').innerText = dados.descricao;
             if(document.getElementById('foto-produto')) document.getElementById('foto-produto').src = dados.foto;
-            if(document.getElementById('preco-exibicao')) document.getElementById('preco-exibicao').innerText = "R$ " + dados.preco;
+            if(document.getElementById('preco-exibicao')) document.getElementById('preco-exibicao').innerText = "$ " + dados.preco;
             
             const botao = document.getElementById('btn-vendas');
             if (botao) {
@@ -36,14 +36,13 @@ window.onload = function() {
         }
     });
 
-    // Abrir painel se for admin
     if (urlParams.get('admin') === 'true') {
         const painel = document.getElementById('painel-admin');
         if(painel) painel.style.display = 'block';
     }
 };
 
-// FUNÇÃO PARA SALVAR
+// 4. FUNÇÃO PARA SALVAR (CORRIGIDA)
 function salvarConfiguracoes() {
     const urlParams = new URLSearchParams(window.location.search);
     const produtoID = urlParams.get('id') || 'default';
@@ -58,7 +57,7 @@ function salvarConfiguracoes() {
 
     database.ref('produtos/' + produtoID).set(dadosParaSalvar)
         .then(() => {
-            alert("Configurações salvas com sucesso!");
+            alert("Configurações de " + produtoID + " salvas com sucesso!");
             location.reload();
         })
         .catch((error) => {
