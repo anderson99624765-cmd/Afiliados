@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="meta-title">Nome do Produto - Oferta Exclusiva</title>
+    <title id="meta-title">Exclusive Offer</title>
     <link rel="stylesheet" href="style.css">
-    <meta name="description" id="meta-description" content="Compre seu produto com o melhor preço. Entrega rápida e garantia total. Aproveite a promoção!">
+    <meta name="description" id="meta-description" content="Get the best deals here. Fast shipping and full warranty. Check it out!">
     
     <style>
-        /* Estilo do círculo girando */
         .spinner {
             border: 4px solid rgba(0, 0, 0, 0.1);
             width: 40px;
@@ -26,32 +25,33 @@
 
     <div id="loader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
         <div class="spinner"></div>
-        <p style="margin-top: 15px; font-family: sans-serif; color: #333;">Carregando ofertas...</p>
+        <p style="margin-top: 15px; font-family: sans-serif; color: #333; font-weight: 500;">Loading best deals...</p>
     </div>
 
     <div class="page-container">
         <main class="product-card">
             <div class="product-image">
-                <img src="https://via.placeholder.com/500x300" id="foto-produto" alt="Imagem do Produto">
+                <img src="" id="foto-produto" alt="Product Image">
             </div>
 
             <section class="product-info">
-                <h1 id="titulo-produto"></h1> <p class="description"></p>
+                <h1 id="titulo-produto"></h1>
+                <p class="description"></p>
                 
                 <div class="price-container">
                     <span class="current-price" id="preco-exibicao"></span>
                 </div>
 
-                <button id="btn-vendas" class="cta-button">Comprar Agora</button>
+                <button id="btn-vendas" class="cta-button">Buy Now</button>
 
                 <section class="admin-panel" id="painel-admin" style="display: none; background: #eee; padding: 15px; border-radius: 8px; margin-top: 20px;">
-                    <h3>Configurações do Produto</h3>
-                    <input type="text" id="input-titulo" placeholder="Título do Produto" style="display:block; width:90%; margin:5px 0;">
-                    <input type="text" id="input-descricao" placeholder="Descrição Curta" style="display:block; width:90%; margin:5px 0;">
-                    <input type="text" id="input-link" placeholder="Link de Afiliado" style="display:block; width:90%; margin:5px 0;">
-                    <input type="text" id="input-foto" placeholder="URL da Foto (Link)" style="display:block; width:90%; margin:5px 0;">
-                    <input type="text" id="input-preco" placeholder="Preço (Ex: 97,00)" style="display:block; width:90%; margin:5px 0;">
-                    <button onclick="salvarConfiguracoes()" style="background: #28a745; color: white; border: none; padding: 10px; cursor: pointer;">Salvar na Nuvem</button>
+                    <h3>Product Settings</h3>
+                    <input type="text" id="input-titulo" placeholder="Product Title" style="display:block; width:90%; margin:5px 0;">
+                    <input type="text" id="input-descricao" placeholder="Short Description" style="display:block; width:90%; margin:5px 0;">
+                    <input type="text" id="input-link" placeholder="Affiliate Link" style="display:block; width:90%; margin:5px 0;">
+                    <input type="text" id="input-foto" placeholder="Image URL" style="display:block; width:90%; margin:5px 0;">
+                    <input type="text" id="input-preco" placeholder="Price (Ex: 97.00)" style="display:block; width:90%; margin:5px 0;">
+                    <button onclick="salvarConfiguracoes()" style="background: #28a745; color: white; border: none; padding: 10px; cursor: pointer;">Save to Cloud</button>
                 </section>
             </section>
         </main>
