@@ -1,61 +1,67 @@
+// 1. CONFIGURAÇÃO DO FIREBASE
+const firebaseConfig = {
+    apiKey: "AIzaSyBw-0k1-Z2-B9j-D2-H7j-J0-K2-L0-M0-N0",
+    authDomain: "seu-projeto.firebaseapp.com",
+    databaseURL: "https://seu-projeto-default-rtdb.firebaseio.com",
+    projectId: "seu-projeto",
+    storageBucket: "seu-projeto.appspot.com",
+    messagingSenderId: "SEU_ID_AQUI",
+    appId: "SEU_APP_ID_AQUI"
+};
+
+// Inicializa o Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
 window.onload = function() {
-    // 1. Identifica o Produto pela URL
     const urlParams = new URLSearchParams(window.location.search);
-    const produtoID = urlParams.get('id') || 'default'; 
+    const produtoID = urlParams.get('id') || 'default';
 
-    // 2. Puxa os dados específicos desse ID (ou usa valores padrão)
-    const titulo = localStorage.getItem(`${produtoID}_titulo`) || "Special Product";
-    const descricao = localStorage.getItem(`${produtoID}_desc`) || "Product description here.";
-    const linkSalvo = localStorage.getItem(`${produtoID}_link`) || "";
-    const foto = localStorage.getItem(`${produtoID}_foto`) || "https://via.placeholder.com/500x300";
-    const preco = localStorage.getItem(`${produtoID}_preco`) || "0.00";
-
-    // 3. Preenche os elementos na tela
-    if(document.getElementById('titulo-produto')) document.getElementById('titulo-produto').innerText = titulo;
-    if(document.querySelector('.description')) document.querySelector('.description').innerText = descricao;
-    if(document.getElementById('foto-produto')) document.getElementById('foto-produto').src = foto;
-    if(document.getElementById('preco-exibicao')) {
-        document.getElementById('preco-exibicao').innerText = "Only $" + preco;
-    }
-
-    // 4. Configuração do Botão de Vendas
-    const botao = document.getElementById('btn-vendas');
-    if (botao) {
-        botao.onclick = function() {
-            if (linkSalvo && linkSalvo.startsWith("http")) {
-                window.location.href = linkSalvo;
-            } else {
-                alert("Please configure the affiliate link for this product!");
+    // BUSCA OS DADOS NA NUVEM
+    database.ref('produtos/' + produtoID).on('value', (snapshot) => {
+        const dados = snapshot.val();
+        
+        if (dados) {
+            if(document.getElementById('titulo-produto')) document.getElementById('titulo-produto').innerText = dados.titulo;
+            if(document.querySelector('.description')) document.querySelector('.description').innerText = dados.descricao;
+            if(document.getElementById('foto-produto')) document.getElementById('foto-produto').src = dados.foto;
+            if(document.getElementById('preco-exibicao')) document.getElementById('preco-exibicao').innerText = "R$ " + dados.preco;
+            
+            const botao = document.getElementById('btn-vendas');
+            if (botao) {
+                botao.onclick = () => {
+                    if (dados.link) window.location.href = dados.link;
+                };
             }
-        };
-    }
+        }
+    });
 
-    // 5. Abre o Painel Admin se tiver ?admin=true na URL
+    // Abrir painel se for admin
     if (urlParams.get('admin') === 'true') {
         const painel = document.getElementById('painel-admin');
         if(painel) painel.style.display = 'block';
     }
 };
 
+// FUNÇÃO PARA SALVAR
 function salvarConfiguracoes() {
-    // Pega o ID atual da URL para saber qual produto estamos editando
     const urlParams = new URLSearchParams(window.location.search);
     const produtoID = urlParams.get('id') || 'default';
 
-    // Captura os valores dos inputs
-    const t = document.getElementById('input-titulo').value.trim();
-    const d = document.getElementById('input-descricao').value.trim();
-    const l = document.getElementById('input-link').value.trim();
-    const f = document.getElementById('input-foto').value.trim();
-    const p = document.getElementById('input-preco').value.trim();
+    const dadosParaSalvar = {
+        titulo: document.getElementById('input-titulo').value.trim(),
+        descricao: document.getElementById('input-descricao').value.trim(),
+        link: document.getElementById('input-link').value.trim(),
+        foto: document.getElementById('input-foto').value.trim(),
+        preco: document.getElementById('input-preco').value.trim()
+    };
 
-    // Salva usando o ID como prefixo (Fundamental!)
-    if(t) localStorage.setItem(`${produtoID}_titulo`, t);
-    if(d) localStorage.setItem(`${produtoID}_desc`, d);
-    if(l) localStorage.setItem(`${produtoID}_link`, l);
-    if(f) localStorage.setItem(`${produtoID}_foto`, f);
-    if(p) localStorage.setItem(`${produtoID}_preco`, p);
-
-    alert(`Settings for "${produtoID}" updated successfully!`);
-    location.reload();
+    database.ref('produtos/' + produtoID).set(dadosParaSalvar)
+        .then(() => {
+            alert("Configurações salvas com sucesso!");
+            location.reload();
+        })
+        .catch((error) => {
+            alert("Erro ao salvar: " + error.message);
+        });
 }
