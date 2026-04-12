@@ -12,19 +12,31 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
+// Função para esconder o loader com suavidade
+function esconderLoader() {
+    const loader = document.getElementById('loader');
+    if(loader) {
+        loader.style.transition = "opacity 0.4s ease";
+        loader.style.opacity = "0";
+        setTimeout(() => { loader.style.display = 'none'; }, 400);
+    }
+}
+
 window.onload = function() {
     const urlParams = new URLSearchParams(window.location.search);
     const produtoID = urlParams.get('id') || 'default';
 
-    // 2. BUSCA OS DADOS
-    database.ref('produtos/' + produtoID).once('value').then((snapshot) => {
+    // 2. BUSCA OS DADOS (Prioridade Máxima)
+    database.ref('produtos/' + produtoID).once('value')
+    .then((snapshot) => {
         const dados = snapshot.val();
         
         if (dados) {
+            // Preenchemos TUDO antes de tirar o loader da tela
             if(document.getElementById('titulo-produto')) document.getElementById('titulo-produto').innerText = dados.titulo;
             if(document.querySelector('.description')) document.querySelector('.description').innerText = dados.descricao;
             if(document.getElementById('foto-produto')) document.getElementById('foto-produto').src = dados.foto;
-            if(document.getElementById('preco-exibicao')) document.getElementById('preco-exibicao').innerText = "$ " + dados.preco;
+            if(document.getElementById('preco-exibicao')) document.getElementById('preco-exibicao').innerText = "R$ " + dados.preco;
             
             const botao = document.getElementById('btn-vendas');
             if (botao) {
@@ -33,14 +45,12 @@ window.onload = function() {
                 };
             }
         }
-
-        // 3. O PULO DO GATO: Esconde o Load após carregar tudo
-        const loader = document.getElementById('loader');
-        if(loader) {
-            loader.style.transition = "opacity 0.5s";
-            loader.style.opacity = "0";
-            setTimeout(() => { loader.style.display = 'none'; }, 500);
-        }
+        // SÓ ESCONDE O LOADER DEPOIS QUE OS DADOS JÁ FORAM PREENCHIDOS
+        esconderLoader();
+    })
+    .catch((error) => {
+        console.error("Erro ao carregar:", error);
+        esconderLoader(); // Tira o loader mesmo se der erro para não travar o site
     });
 
     if (urlParams.get('admin') === 'true') {
@@ -65,8 +75,5 @@ function salvarConfiguracoes() {
         .then(() => {
             alert("Configurações de " + produtoID + " salvas com sucesso!");
             location.reload();
-        })
-        .catch((error) => {
-            alert("Erro ao salvar: " + error.message);
         });
 }
