@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="meta-title">Loading Special Offer...</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="description" id="meta-description" content="Check out the best exclusive offer.">
+</head>
+<body>
+
+    <div class="page-container">
+        <main class="product-card">
+    <div class="product-image">
+        <img src="https://via.placeholder.com/500x300" id="foto-produto" alt="">
+    </div>
+
+    <section class="product-info">
+        <h1 id="titulo-produto">product name</h1>
+        <p class="description">Product Description.</p>
+        
+        <div class="price-container">
+            <span class="current-price" id="preco-exibicao">$ 0,00</span>
+        </div>
+
+        <button id="btn-vendas" class="cta-button">buy now</button>
+
+        <section class="admin-panel" id="painel-admin" style="display: none;">
+    <h3>Admin Settings</h3>
+    
+    <input type="text" id="input-titulo" placeholder="Product Title">
+    <input type="text" id="input-descricao" placeholder="Product Description">
+    
+    <input type="text" id="input-link" placeholder="Affiliate Link">
+    <input type="text" id="input-foto" placeholder="Image URL">
+    <input type="text" id="input-preco" placeholder="Price (Ex: 97.00)">
+    
+    <button onclick="salvarConfiguracoes()">Save Settings</button>
+</section>
+</main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
