@@ -30,12 +30,20 @@ window.onload = function() {
         const dados = snapshot.val();
         
         if (dados) {
+            // Update Page Content
             if(document.getElementById('titulo-produto')) document.getElementById('titulo-produto').innerText = dados.titulo;
             if(document.querySelector('.description')) document.querySelector('.description').innerText = dados.descricao;
             if(document.getElementById('foto-produto')) document.getElementById('foto-produto').src = dados.foto;
-            // US Currency format
             if(document.getElementById('preco-exibicao')) document.getElementById('preco-exibicao').innerText = "$" + dados.preco;
             
+            // SEO & Browser Tab Title Update
+            document.title = dados.titulo + " - Official Store"; 
+            const metaDesc = document.getElementById('meta-description');
+            if(metaDesc) {
+                metaDesc.content = "Get the " + dados.titulo + " at the best price. Limited time offer!";
+            }
+            
+            // Button Configuration
             const botao = document.getElementById('btn-vendas');
             if (botao) {
                 botao.innerText = "Buy Now";
@@ -70,8 +78,8 @@ function salvarConfiguracoes() {
     };
 
     database.ref('produtos/' + produtoID).set(dadosParaSalvar)
-        .then(() => {
-            alert("Success! Settings for " + produtoID + " saved.");
-            location.reload();
-        });
+    .then(() => {
+        alert("Success! Settings for " + produtoID + " saved.");
+        location.reload();
+    });
 }
